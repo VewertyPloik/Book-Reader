@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Reader Game</title>
+<style>
+  body { margin:0; font-family:Arial, sans-serif; background:#111; color:#eee; }
+  .container { max-width:600px; margin:40px auto; padding:20px; background:#222; border-radius:12px; box-shadow:0 0 12px #000; }
+  h1 { font-size:24px; margin-bottom:10px; }
+  .meta { font-size:14px; color:#bbb; margin-bottom:20px; }
+  .page { font-size:16px; line-height:1.6; min-height:200px; white-space:pre-wrap; }
+  .controls { display:flex; justify-content:space-between; margin-top:20px; }
+  button { background:#444; border:none; padding:10px 20px; color:white; border-radius:8px; cursor:pointer; font-size:14px; }
+  button:hover { background:#666; }
+  .hidden { display:none; }
+  .book-list { display:flex; flex-direction:column; gap:10px; }
+  .book-button { background:#333; padding:12px; border-radius:8px; text-align:left; font-size:16px; cursor:pointer; }
+  .book-button:hover { background:#555; }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Book Selection -->
+  <div id="library">
+    <h1>Choose a Book</h1>
+    <div class="book-list" id="book-list"></div>
+  </div>
+
+  <!-- Reader -->
+  <div id="reader" class="hidden">
+    <h1 id="title"></h1>
+    <div class="meta" id="meta"></div>
+    <div class="page" id="page"></div>
+    <div class="controls">
+      <button id="prev">◀ Previous</button>
+      <button id="next">Next ▶</button>
+    </div>
+    <div class="controls" style="justify-content:center; margin-top:10px;">
+      <button id="back">⬅ Back to Library</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const books = [
+  {
+    title: "Ronald The Spy (Book 1)",
+    release: "September 17, 2025",
+    pages: [
+`Ronald’s mom and him were eating dinner when she said, “Ronald look! Diamond earrings are free for employees at Walmart, I should work at Walmart.” Ronald laughed and got ready for bed. Ronald went to bed not knowing this would be his last night as an ordinary boy… Ronald woke up being dragged into a van by two men in all black.`,
+`Ronald was tied up and could not move. The man in the passenger seat removed his mask. “You’re probably wondering what is happening right now?” Ronald said “Yes! Let me go!” The man replied, “Ronald, we’ve been looking for you since third grade, when we saw your red watch with 77 on it.”`,
+`“That watch is only given to kids who need to be protected.” “Protected from what?” Ronald asked. “From those seeking revenge.” “Revenge on who?” “Your dad, Rowan Tekk, a spy for GS—General Spies.” “What? I’ve never seen my dad!” “He kept it secret to protect you.” “So who are you?” “We’re U18 GS, and you’re joining us.”`,
+`When they arrived Ronald saw a warehouse full of young spies training. He asked a blonde boy what was happening. “Welcome to U18 GS! You must be new. I’m Terry.” “I’m Ronald.” Ronald wandered, still shocked. He tried speaking to a guard, who ignored him. Angry, he punched the guard’s crotch. The guard chased him. Ronald ran for the exit.`,
+`Another guard blocked him, they collided, and then fought each other instead. Ronald slipped away calmly. But another guard tackled him. “Get to work kid, start your lessons.” Ronald was taken to station 6 - iSPY, a game of spotting burglars in a crowd. Suddenly a guard called him. “Get in line, you’re up!”`,
+`The recruits lined up outside near cars. “Mission 1: spy on an old lady and see where she works.” Ronald’s guard drove him. The lady wore a blue dress, green glasses, and diamond earrings. “I know where,” Ronald said. “Go ahead.” “She works at Walmart.” “How’d you know?” “My mom told me diamond earrings are free for Walmart employees.” “Smart kid. Rest up, tomorrow’s a big day.” TO BE CONTINUED`
+    ]
+  },
+  {
+    title: "Ronald The Spy (Book 2)",
+    release: "September 17, 2025",
+    pages: [
+`Ronald woke up to an alarm sounding “BEEP, BEEP, BEEP.” It startled him and the other spies awake. “Everyone gather in the main office,” a guard yelled through a megaphone. Ronald followed the others. On a board were 3 papers—a kill list. Names: Peter Dre (his neighbor), Geraldine Dre (Peter’s wife), and shockingly Rowan Tekk—Ronald’s dad. “They want to kill my dad?” Ronald thought.`,
+`Mid-thought, Ronald was dragged away. He was placed at the center of the assembly. “Hello everyone! Before my big announcement, give it up for Ronald Tekk!” Applause erupted, Ronald blushed. Suddenly—gunshots. The glass roof shattered. Ronald ran, hiding in a closet. Knocking. The door slid open—it was Terry. Ronald let him in.`,
+`A guard found them and pulled both out, taking them to a bulletproof car. “Wha-what is happe-happening?” Terry stuttered. “Safe zone,” the guard whispered. Ronald asked, “Why was my dad on the kill list?” Silence. “Tell me, why!” Ronald’s voice cracked. The guard finally spoke: “They want to brainwash you into thinking your dad is bad. They want you to kill him.”`,
+`Ronald froze. The organization wanted him to kill his own father. “Why him?” Ronald asked. “When you were born, your dad’s group was proud. But Harry was jealous you got protection. He left and built his own organization.” “Why my neighbors too?” “They can provide evidence. He needs them gone.”`,
+`The guard explained: “I only joined to protect you, Ronald.” He drove Ronald and Terry to a police station, reporting the attack. They drove hours out of state, away from the organization. Ronald’s mind raced—the whole plot was designed to turn him against his own father. TO BE CONTINUED`
+    ]
+  },
+  {
+    title: "Ronald The Spy (Book 3)",
+    release: "September 17, 2025",
+    pages: [
+`The guard got a radio call—it was Ronald’s dad. “Let me speak to my son.” “Dad?” Ronald said. “Ronald?” Rowan replied. “Is it really you?” they both asked in sync. Rowan told him: “You must kidnap Harry, the warehouse owner. Bring him to the police. Then we can be safe, and I can retire.” “Okay dad,” Ronald said. The signal cut out.`,
+`The guard drove Ronald and Terry back to the warehouse. “How do I capture him?” Ronald asked. The guard handed him a net gun. Inside, Ronald called out. A man with a nametag—Harrison E.—appeared. It was Harry. Ronald asked for car help. “How long have you been here?” Asked Harry curiously. “Since the attack,” Ronald said. “Follow me boy,” Harry said creepily. Ronald followed.`,
+`Suddenly, Harry grabbed Ronald. Ronald tried firing the net gun but Harry dragged him to the basement and tied him to a chair. “Help!” Ronald yelled, but no one came. As Harry left, a shadowy figure appeared—it was the guard! He smashed Harry with a shovel, knocking him out. The guard tied Harry up, stuffed him in the trunk, and drove away.`,
+`On the way Ronald asked, “Was that part of your plan?” “Yes,” the guard said. “You were the distraction.” Terry said to the guard “You’re smart, you should be a spy.” The guard replied “I worked with Ronald’s dad,” . Terry asked the guard “What’s your name?” The guard answered “Pablo James,” they arrived to the police station. At the police station, Harry was taken in. “All part of your dad’s plan,” Pablo said.`,
+`As they left, Harry screamed, “I’LL SEE YOU IN COURT!” “And you’ll lose,” Pablo muttered, making everyone laugh—except Terry, who was missing. Then he popped out of the trunk. “Sorry guys!” Everyone laughed. Pablo drove to the airport and dropped Ronald at the airport. Seconds later, Ronald’s dad ran out and hugged him. “Thanks dad. Pablo saved us.” “Pablo?” Rowan asked. “Yes dad, Pablo James, your work friend.” “I know Greg James, but I don’t know Pablo James.” Ronald felt uneasy.`,
+`They went home, surprising Ronald’s mom. But the news shocked them: “Child named Terry Richardson shot dead today at an abandoned warehouse in Eastern Michigan.” “Oh my god,” Ronald whispered. TO BE CONTINUED`
+    ]
+  }
+];
+
+let currentBook = 0;
+let currentPage = 0;
+
+// Load library
+function loadLibrary() {
+  const list = document.getElementById("book-list");
+  list.innerHTML = "";
+  books.forEach((book, index) => {
+    const btn = document.createElement("button");
+    btn.className = "book-button";
+    btn.innerText = `${book.title}\nRelease: ${book.release} | Pages: ${book.pages.length}`;
+    btn.onclick = () => openBook(index);
+    list.appendChild(btn);
+  });
+}
+
+// Open book
+function openBook(index) {
+  currentBook = index;
+  currentPage = 0;
+  document.getElementById("library").classList.add("hidden");
+  document.getElementById("reader").classList.remove("hidden");
+  loadBook();
+}
+
+function loadBook() {
+  const book = books[currentBook];
+  document.getElementById("title").innerText = book.title;
+  document.getElementById("meta").innerText = `Release Date: ${book.release} | Pages: ${book.pages.length}`;
+  showPage();
+}
+
+function showPage() {
+  const book = books[currentBook];
+  document.getElementById("page").innerText = book.pages[currentPage];
+  document.getElementById("prev").disabled = currentPage === 0;
+  document.getElementById("next").disabled = currentPage === book.pages.length - 1;
+}
+
+// Controls
+document.getElementById("prev").onclick = () => {
+  if (currentPage > 0) { currentPage--; showPage(); }
+};
+document.getElementById("next").onclick = () => {
+  const book = books[currentBook];
+  if (currentPage < book.pages.length - 1) { currentPage++; showPage(); }
+};
+document.getElementById("back").onclick = () => {
+  document.getElementById("reader").classList.add("hidden");
+  document.getElementById("library").classList.remove("hidden");
+};
+
+// Init
+loadLibrary();
+</script>
+</body>
+</html>
